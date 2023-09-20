@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.igorbag.githubsearch.R
 import br.com.igorbag.githubsearch.data.GitHubService
 import br.com.igorbag.githubsearch.domain.Repository
+import br.com.igorbag.githubsearch.ui.adapter.RepositoryAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Metodo responsavel por fazer a configuracao base do Retrofit
-    fun setupRetrofit() {
+    private fun setupRetrofit() {
         val builder = Retrofit.Builder()
             .baseUrl("https://api.github.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Metodo responsavel por buscar todos os repositorios do usuario fornecido
-    fun getAllReposByUserName() {
+    private fun getAllReposByUserName() {
         githubApi.getAllRepositoriesByUser(nomeUsuario.text.toString()).enqueue(object :
             Callback<List<Repository>> {
             override fun onResponse(call: Call<List<Repository>>, response: Response<List<Repository>>) {
@@ -92,12 +93,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    // Metodo responsavel por realizar a configuracao do adapter
     fun setupAdapter(list: List<Repository>) {
-        /*
-            @TODO 7 - Implementar a configuracao do Adapter , construir o adapter e instancia-lo
-            passando a listagem dos repositorios
-         */
+            val adapter = RepositoryAdapter(list)
+            listaRepositories.adapter = adapter
     }
 
 
