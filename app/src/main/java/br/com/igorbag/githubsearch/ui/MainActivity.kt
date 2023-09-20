@@ -7,11 +7,15 @@ import android.os.Bundle
 import android.text.Editable
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.com.igorbag.githubsearch.R
 import br.com.igorbag.githubsearch.data.GitHubService
 import br.com.igorbag.githubsearch.domain.Repository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -72,7 +76,20 @@ class MainActivity : AppCompatActivity() {
 
     //Metodo responsavel por buscar todos os repositorios do usuario fornecido
     fun getAllReposByUserName() {
-        // TODO 6 - realizar a implementacao do callback do retrofit e chamar o metodo setupAdapter se retornar os dados com sucesso
+        githubApi.getAllRepositoriesByUser(nomeUsuario.text.toString()).enqueue(object :
+            Callback<List<Repository>> {
+            override fun onResponse(call: Call<List<Repository>>, response: Response<List<Repository>>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { setupAdapter(it) }
+                } else {
+                    Toast.makeText(baseContext, "Aconteceu um problema para puxar os dados, tente novamente mais tarde", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<Repository>>, failure: Throwable) {
+                Toast.makeText(baseContext, "Aconteceu um problema para puxar os dados, tente novamente mais tarde", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     // Metodo responsavel por realizar a configuracao do adapter
