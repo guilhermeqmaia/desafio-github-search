@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupListeners() {
         btnConfirmar.setOnClickListener {
             saveUserLocal()
+            getAllReposByUserName()
         }
     }
 
@@ -65,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         nomeUsuario.setText(username)
     }
 
-    //Metodo responsavel por fazer a configuracao base do Retrofit
     private fun setupRetrofit() {
         val builder = Retrofit.Builder()
             .baseUrl("https://api.github.com/")
@@ -75,9 +75,11 @@ class MainActivity : AppCompatActivity() {
         githubApi = builder.create(GitHubService::class.java)
     }
 
-    //Metodo responsavel por buscar todos os repositorios do usuario fornecido
     private fun getAllReposByUserName() {
-        githubApi.getAllRepositoriesByUser(nomeUsuario.text.toString()).enqueue(object :
+        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString(getString(R.string.saved_username), "")
+        if(username == "" || username == null) return
+        githubApi.getAllRepositoriesByUser(username).enqueue(object :
             Callback<List<Repository>> {
             override fun onResponse(
                 call: Call<List<Repository>>,
