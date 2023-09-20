@@ -108,13 +108,13 @@ class MainActivity : AppCompatActivity() {
 
     fun setupAdapter(list: List<Repository>) {
         val adapter = RepositoryAdapter(list)
+        adapter.carItemLister = { openBrowser(it.htmlUrl) }
+        adapter.btnShareLister = {shareRepositoryLink(it.htmlUrl)}
         listaRepositories.adapter = adapter
+
     }
 
-
-    // Metodo responsavel por compartilhar o link do repositorio selecionado
-    // @Todo 11 - Colocar esse metodo no click do share item do adapter
-    fun shareRepositoryLink(urlRepository: String) {
+    private fun shareRepositoryLink(urlRepository: String) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, urlRepository)
@@ -125,17 +125,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(shareIntent)
     }
 
-    // Metodo responsavel por abrir o browser com o link informado do repositorio
-
-    // @Todo 12 - Colocar esse metodo no click item do adapter
-    fun openBrowser(urlRepository: String) {
+    private fun openBrowser(urlRepository: String) {
         startActivity(
             Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse(urlRepository)
             )
         )
-
     }
 
 }
