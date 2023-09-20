@@ -79,23 +79,34 @@ class MainActivity : AppCompatActivity() {
     private fun getAllReposByUserName() {
         githubApi.getAllRepositoriesByUser(nomeUsuario.text.toString()).enqueue(object :
             Callback<List<Repository>> {
-            override fun onResponse(call: Call<List<Repository>>, response: Response<List<Repository>>) {
+            override fun onResponse(
+                call: Call<List<Repository>>,
+                response: Response<List<Repository>>
+            ) {
                 if (response.isSuccessful) {
                     response.body()?.let { setupAdapter(it) }
                 } else {
-                    Toast.makeText(baseContext, "Aconteceu um problema para puxar os dados, tente novamente mais tarde", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        baseContext,
+                        "Aconteceu um problema para puxar os dados, tente novamente mais tarde",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Repository>>, failure: Throwable) {
-                Toast.makeText(baseContext, "Aconteceu um problema para puxar os dados, tente novamente mais tarde", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    baseContext,
+                    "Aconteceu um problema para puxar os dados, tente novamente mais tarde",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         })
     }
 
     fun setupAdapter(list: List<Repository>) {
-            val adapter = RepositoryAdapter(list)
-            listaRepositories.adapter = adapter
+        val adapter = RepositoryAdapter(list)
+        listaRepositories.adapter = adapter
     }
 
 
